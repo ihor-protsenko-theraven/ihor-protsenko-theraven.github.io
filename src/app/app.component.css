@@ -1,6 +1,9 @@
+
+
 .nft-form {
   max-width: 350px;
   margin: 20px auto;
+  position: relative;
 }
 
 .form {
@@ -54,4 +57,13 @@
 
 .form .form_input:focus.ng-invalid {
   outline: 1px solid red;
+}
+
+
+.submit_message{
+  position: absolute;
+  /* top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%); */
+  bottom: -36px;
 }

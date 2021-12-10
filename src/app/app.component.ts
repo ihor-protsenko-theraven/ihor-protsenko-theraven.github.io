@@ -21,6 +21,8 @@ export class AppComponent {
   } );
 
   submitted = false
+  success = false
+  danger = false
 
   constructor ( private http: HttpClient ) {
 
@@ -32,12 +34,19 @@ export class AppComponent {
     this.submitted = true;
 
     if ( this.form.invalid ) {
+       this.success = false
       return;
     } else {
       this.postData( data ).subscribe(
-        res => console.log( res ),
-        err => console.log( err ) )
+        res => ( this.success = true, console.log( res )),
+        err => ( this.danger = true, console.log( err ) ))
+
       this.submitted = false
+
+      setTimeout(() => {
+        this.resetMessage()
+      }, 2000);
+
       this.form.reset()
     }
   }
@@ -48,6 +57,13 @@ export class AppComponent {
 
   get f (): { [ key: string ]: AbstractControl } {
     return this.form.controls;
+  }
+
+  resetMessage(){
+    if( this.success || this.danger ){
+      this.danger = false;
+      this.success = false
+    }
   }
 
 }

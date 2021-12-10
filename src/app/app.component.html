@@ -27,6 +27,11 @@
       <button class="form_submit"type="submit">Submit</button>
 
 </form>
+
+<div class="submit_message">
+    <span *ngIf="success" class="alert alert-success"> Success </span>
+    <span *ngIf="danger" class="alert alert-danger"> Something wrong, please try again</span>
+</div>
 </div>
 
 

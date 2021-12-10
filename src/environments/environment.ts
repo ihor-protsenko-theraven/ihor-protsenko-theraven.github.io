@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  api: 'http://192.168.31.88:8080/api/'
+  api: 'https://nft.gaimin.gg/api'
 };
 
 /*
