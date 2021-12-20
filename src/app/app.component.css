@@ -21,7 +21,7 @@
 }
 
 .form .form_input {
-  margin: 10px 0;
+  margin: 3px;
   border-color: rgb(70 185 255 /1);
   background-color: #07090B ;
   color: #ffffff;
@@ -38,7 +38,7 @@
 }
 
 .form .form_submit {
-  margin: 10px 0;
+  margin: 3px;
   cursor: pointer;
   border-color: rgb(70 185 255 /1);
   padding: 10px;
