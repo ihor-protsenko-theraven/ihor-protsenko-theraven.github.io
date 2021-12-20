@@ -1,23 +1,11 @@
-
-
-
 .nft-form {
-  max-width: 350px;
-  /* margin: 20px auto; */
   position: relative;
   color: #ffffff;
 }
 
 .form {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
+   display: flex;
    color: #ffffff;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
 }
 
 .form .form_input {
@@ -29,7 +17,7 @@
   border-radius: 20px;
   outline: 3px solid transparent;
   transition: outline 0.2s, flex-basis 0.2s;
-
+  min-width: 300px;
 }
 
 .form .form_input:hover,
@@ -43,7 +31,7 @@
   border-color: rgb(70 185 255 /1);
   padding: 10px;
   border-radius: 20px;
-  /* background-color: #708dfd; */
+  min-width: 300px;
   background-color: rgb(70 185 255 / 1);
   color: #ffffff;
   text-transform: uppercase;
@@ -61,17 +49,8 @@
   outline: 0;
 }
 
-/* .form .form_input:focus.ng-invalid {
-  outline: 1px solid red;
-  border: none;
-} */
-
-
 
 .submit_message{
   position: absolute;
-  /* top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%); */
-  bottom: -36px;
+  bottom: -26px;
 }
