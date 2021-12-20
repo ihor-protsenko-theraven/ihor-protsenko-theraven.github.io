@@ -17,7 +17,7 @@
   border-radius: 20px;
   outline: 3px solid transparent;
   transition: outline 0.2s, flex-basis 0.2s;
-  min-width: 300px;
+  min-width: 250px;
 }
 
 .form .form_input:hover,
@@ -31,7 +31,7 @@
   border-color: rgb(70 185 255 /1);
   padding: 10px;
   border-radius: 20px;
-  min-width: 300px;
+  min-width: 250px;
   background-color: rgb(70 185 255 / 1);
   color: #ffffff;
   text-transform: uppercase;
