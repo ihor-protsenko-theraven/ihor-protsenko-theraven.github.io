@@ -43,9 +43,9 @@ export class AppComponent {
 
       this.submitted = false
 
-      // setTimeout(() => {
-      //   this.resetMessage()
-      // }, 2000);
+      setTimeout(() => {
+        this.resetMessage()
+      }, 2000);
 
       this.form.reset()
     }
