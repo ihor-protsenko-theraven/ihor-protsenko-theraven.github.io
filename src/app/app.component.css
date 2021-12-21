@@ -6,6 +6,7 @@
 .form {
    display: flex;
    color: #ffffff;
+   flex-wrap: wrap;
 }
 
 .form .form_input {
@@ -17,7 +18,7 @@
   border-radius: 20px;
   outline: 3px solid transparent;
   transition: outline 0.2s, flex-basis 0.2s;
-  min-width: 250px;
+  min-width: 270px;
 }
 
 .form .form_input:hover,
@@ -31,7 +32,7 @@
   border-color: rgb(70 185 255 /1);
   padding: 10px;
   border-radius: 20px;
-  min-width: 250px;
+  min-width: 270px;
   background-color: rgb(70 185 255 / 1);
   color: #ffffff;
   text-transform: uppercase;
@@ -47,6 +48,10 @@
 
 .form .form_submit:focus {
   outline: 0;
+}
+
+.form .form_input:focus.ng-invalid {
+  outline: 1px solid red;
 }
 
 
