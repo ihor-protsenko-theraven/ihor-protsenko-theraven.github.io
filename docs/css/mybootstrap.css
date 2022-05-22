@@ -1,0 +1,14 @@
+.container-box {
+    width: 1170px;
+    margin: auto;
+    min-height: 1px;box-sizing: border-box;
+}
+
+@media(max-width:1220px) {
+    .container-box {
+		width: 100%;
+		padding-left: 25px;
+		padding-right: 25px;
+		display: inline-block;
+    }
+}

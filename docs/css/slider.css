@@ -1,0 +1,204 @@
+.slider-top-page{
+position: absolute;
+top: 0px;
+left: 0px;
+z-index: 1;
+width: 100%;
+min-height: 100vh;
+}
+.slider-top-page div{
+width: 100%;
+min-height: 100vh;
+}
+
+.slider-top-page > .slick-next {
+    position: absolute;
+    right: 30px;
+    z-index: 1;
+}
+
+.slider-top-page > .slick-prev {
+    position: absolute;
+    left: 60px;
+    z-index: 1;
+}
+
+.slider-top-page > .slick-next {
+    position: absolute;
+    right: 0px;
+    z-index: 1;
+    background: url('/wp-content/themes/kamen/img/right-button.png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: auto;
+    width: 68px;
+    height: 68px;
+    opacity: 1;
+    transition: 0.2s;
+}
+
+.slider-top-page > .slick-next:hover,
+.slider-top-page > .slick-prev:hover {
+    opacity: 0.9;
+    transition: 0.2s;
+}
+
+:hover .slider-top-page > .slick-next:before {
+    content: "";
+    background: url('/wp-content/themes/kamen/img/right-button.png');
+    width: 58px;
+    height: 60px;
+}
+
+.slider-top-page > .slick-prev {
+    left: 0px;
+    z-index: 1;
+    background: url('/wp-content/themes/kamen/img/left-button.png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: auto;
+    width: 58px;
+    height: 68px;
+    opacity: 1;
+    transition: 0.2s;
+}
+
+.slider-top-page > .slick-prev:before {
+    content: "";
+    background: url('/wp-content/themes/kamen/img/left-button.png');
+    width: 58px;
+    height: 60px;
+}
+
+.slider-top-page > .slick-prev:before,
+.slider-top-page > .slick-next:before {
+    color: transparent;
+}
+
+/**clider ackcii**/
+
+.slider-ackii-index{
+position: relative;
+z-index: 1;
+width: 100%;
+height: auto;
+}
+.slider-ackii-index div{
+width: 100%;
+min-height: 300px;
+}
+
+.slider-ackii-index > .slick-next {
+    position: absolute;
+    right: 30px;
+    z-index: 1;
+}
+
+.slider-ackii-index > .slick-prev {
+    position: absolute;
+    left: 60px;
+    z-index: 1;
+}
+
+.slider-ackii-index > .slick-next {
+    position: absolute;
+    right: 0px;
+    z-index: 1;
+    background: url('/wp-content/themes/kamen/img/right-button.png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: auto;
+    width: 68px;
+    height: 68px;
+    opacity: 1;
+    transition: 0.2s;
+}
+
+.slider-ackii-index > .slick-next:hover,
+.slider-ackii-index > .slick-prev:hover {
+    opacity: 0.9;
+    transition: 0.2s;
+}
+
+:hover .slider-ackii-index > .slick-next:before {
+    content: "";
+    background: url('/wp-content/themes/kamen/img/right-button.png');
+    width: 58px;
+    height: 60px;
+}
+
+.slider-ackii-index > .slick-prev {
+    left: 0px;
+    z-index: 1;
+    background: url('/wp-content/themes/kamen/img/left-button.png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: auto;
+    width: 58px;
+    height: 68px;
+    opacity: 1;
+    transition: 0.2s;
+}
+
+.slider-ackii-index > .slick-prev:before {
+    content: "";
+    background: url('/wp-content/themes/kamen/img/left-button.png');
+    width: 58px;
+    height: 60px;
+}
+.slider-ackii-index > .slick-prev:before,
+.slider-ackii-index > .slick-next:before {
+    color: transparent;
+}
+
+.slider-ackii-index h3{
+font-size: 32px;
+color: #fff;
+text-shadow: 1px 1px 1px #000;
+}
+.slider-ackii-index p{
+font-size: 22px;
+    color: #fff;
+    background: #900000;
+    display: inline-block;
+    padding: 12px 22px;
+    font-weight: 300;
+}
+.slider-ackii-index span{
+display: flex;
+flex-direction: row;
+flex-wrap: wrap;
+align-items: center;
+justify-content: space-around;
+width: 100%;
+}
+.post-slider-ackcii{
+height: 100%;
+width: 100%;
+display: flex;
+flex-direction: column;
+justify-content: center;
+position: relative;
+}
+::selection {
+
+    color: #fff;
+    text-shadow: none;
+
+}
+::selection {
+
+    color: #fff;
+    text-shadow: none;
+
+}
+
+.post-slider-ackcii a {
+    position: absolute;
+    bottom: 10px;
+    color: #030303;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 16px;
+    right: 10%;
+}
