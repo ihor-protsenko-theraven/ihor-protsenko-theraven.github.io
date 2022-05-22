@@ -1,4 +1,4 @@
-/*   
+/*
 Theme Name: burum
 Author: Dmitrij Nikolaenko
 Authot Email: dmitrij.nikolaenko.91@gmail.com
@@ -311,7 +311,7 @@ footer {
 }
 
 .menu-top-site a:hover {
-	color: #000000; 
+	color: #000000;
 	border: 1px solid  #aadbe9;  ;
 	border-radius: 8px;
 }
@@ -799,9 +799,9 @@ input.wpcf7-not-valid {
 }
 
 .steps__form {
-	background: #8360c3; 
-    background: -webkit-linear-gradient(to right, #2ebf91, #8360c3); 
-    background: linear-gradient(to right, #2ebf91, #8360c3); 
+	background: #8360c3;
+    background: -webkit-linear-gradient(to right, #2ebf91, #8360c3);
+    background: linear-gradient(to right, #2ebf91, #8360c3);
 	border-bottom: 1px solid #000000;
 	border-radius: 10px;
 	margin-top: 40px;
@@ -1321,7 +1321,7 @@ input::-webkit-inner-spin-button {
 	.mobile-menu {
 		position: fixed;
 		z-index: 99;
-		background: #f3da1f;
+		background: #2ebf91;
 		width: 100%;
 		box-sizing: border-box;
 		padding: 16px 12px;
