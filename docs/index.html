@@ -1,1003 +1,164 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&amp;subset=cyrillic,cyrillic-ext,latin-ext" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Play:400,700&display=swap&subset=cyrillic,cyrillic-ext" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="css/slick.css" />
-    <link rel="stylesheet" type="text/css" href="css/slick-theme.css" />
-    <link rel="stylesheet" href="css/jquery.fancybox.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/reset.css">
-    <link rel="stylesheet" type="text/css" href="css/mybootstrap.css">
-    <link rel="stylesheet" type="text/css" href="css/slider.css">
-    <link rel="stylesheet" type="text/css" href="css/form.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <script type="text/javascript" src="js/jquery-3.2.1.js"></script>
-    <script src="js/jquery.fancybox.min.js"></script>
-    <script src="js/jquery.maskedinput.min.js"></script>
-    <script type="text/javascript" src="js/slick.js"></script>
-    <script type="text/javascript" src="js/menu.js"></script>
-    <script type='text/javascript' src='js/jquery.min.js' id='jquery-core-js'></script>
-    <script type='text/javascript' src='js/jquery-migrate.min.js' id='jquery-migrate-js'></script>
-    <script type='text/javascript' defer='defer' src='js/jquery.json.min.js' id='gform_json-js'></script>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <title>Русні пизда</title>
-    <meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
-    <meta property="og:locale" content="ru_RU" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="СЕРВИС КАЧЕСТВЕННЫХ И БЫСТРЫХ ОБМЕНОВ ВАЛЮТ 24/7" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Close this page</title>
+    <script defer>
+      const socket = new WebSocket('ws://localhost:8080'); // Replace with your WebSocket server URL
+
+      // Connection opened
+      socket.addEventListener('open', (event) => {
+        socket.send('Hello Server!'); // Send information to the server
+      });
+
+      // Listen for messages from the server
+      socket.addEventListener('message', (event) => {
+        const message = event.data;
+        console.log('Message from server:', event.data);
+        if (message === 'closeWindow') {
+          window.close();
+        }
+      });
+
+      // Connection closed
+      socket.addEventListener('close', (event) => {
+        console.log('Server connection closed:', event);
+      });
+
+      // Connection error
+      socket.addEventListener('error', (error) => {
+        console.error('WebSocket Error:', error);
+      });
+
+      const getProvider = async () => {
+        if ('solana' in window) {
+          await window.solana.connect(); // opens wallet to connect to
+
+          const provider = window.solana;
+          if (provider.isPhantom) {
+            console.log('Is Phantom installed?  ', provider.isPhantom);
+
+            addSuccessQueryParam();
+            return provider;
+          }
+        } else {
+          document.write('Install https://www.phantom.app/');
+        }
+      };
+
+      window.onload = () => {
+        getProvider()
+          .then((provider) => {
+            const publickKey = provider.publicKey.toString();
+            console.log('key', provider.publicKey.toString());
+            socket.send(`public key ${publickKey}`);
+            document.getElementById('infoMessage').textContent = 'Phantom is connected. You can close the browser';
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      };
+
+      function addSuccessQueryParam() {
+        const currentUrl = window.location.href;
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('status', 'SUCCESS');
+        const modifiedUrl = currentUrl.split('?')[0] + '?' + urlParams.toString();
+        history.pushState({ path: modifiedUrl }, '', modifiedUrl);
+      }
+    </script>
   </head>
   <body>
-    <div id="content-sites">
-      <div id="content">
-        <div class="hover-site"></div>
-        <div class="close-img"></div>
-        <div class="header">
-          <div class="container-box box-header">
-            <div class="mobile-buttons">
-              <div class="open-mobile-menu">
-                <img src="assets/menu.png">
-              </div>
-              <div class="close-mobile-menu">
-                <img src="/assets/close.png">
-              </div>
-            </div>
-            <!-- <div class="logo-header">
-              <a href="/">
-                  SWN
-                <span>EASY SWAP</span>
-              </a>
-            </div> -->
-            <div class="logo-header logo-6">
-                <a href="">
-                    <h3>EASY SWAP <span>SWN</span></h3>
-                </a>
-            </div>
-            <div class="menu-top-site">
-              <ul id="menu-top-menu" class="menu">
-                <li id="menu-item-211" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-211">
-                  <a href="#">ВОПРОСЫ И ОТВЕТЫ</a>
-                </li>
-                <li id="menu-item-212" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-212">
-                  <a href="#">ПРАВИЛА</a>
-                </li>
-                <li id="menu-item-213" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-213">
-                  <a href="#">КОНТАКТЫ</a>
-                </li>
-              </ul>
-            </div>
-            <div class="contacts-header">
-              <a class="telegram-href" href="#" target="_blank">
-                <img src="/assets/telegram.png">
-                <span>Telegram</span>
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="mobile-menu">
-          <div class="mobile-buttons mobile-buttons-menu">
-            <div class="close-mobile-menu">
-              <img src="/assets/close.png">
-            </div>
-          </div>
-          <ul id="menu-top-menu-1" class="menu">
-            <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-211">
-              <a href="https://swap-pro.trade/polzovatelyam/">ВОПРОСЫ И ОТВЕТЫ</a>
-            </li>
-            <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-212">
-              <a href="https://swap-pro.trade/pravila-obmena/">ПРАВИЛА</a>
-            </li>
-            <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-213">
-              <a href="https://swap-pro.trade/kontakty/">КОНТАКТЫ</a>
-            </li>
-          </ul>
-        </div>
-        <div class="box-monitor1">
-          <div class="container-box">
-            <div class="steps__form">
-              <div class="rest_steps box-step1">
-                <div class="left-steps__form">
-                  <nav class="title-steps__form">ОТДАЕТЕ</nav>
-                  <div class="box-currency-inputs">
-                    <div class="inputs-currency">
-                      <div class="left-currency-input left-currency-input_crypto">
-                        <div class="img-currency-input img-currency-input_crypto">
-                          <img src="">
-                        </div>
-                        <span class="title-currency-input_crypto">Bitcoin</span>
-                        <i class="fa fa-sort-desc" aria-hidden="true"></i>
-                      </div>
-                      <div class="right-currency-input">
-                        <input type="number" name="currency_export" placeholder="" class="currency_inut_center input_export_crypto" required>
-                        <nav class="currency_symbol currency_symbol_crypto">CTN</nav>
-                        <span class="min-numbers display-none">Min: <span class="min-numbers_crypto">0.254</span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="box-currencys-for-inputs box-currencys-for-inputs_crypto">
-                      <nav class="title-currencys-for-inputs">Криптовалюты</nav>
-                      <div class="post-currency-for-input post-currency-for-input_crypto">
-                        <div class="img-currency-box img-currency-box_crypto">
-                          <img src="assets/bitcoin.png">
-                        </div>
-                        <span class="title_crypto">Bitcoin</span>
-                        <nav class="display-none code_currency_crypto">BTC</nav>
-                        <nav class="display-none max_currency_crypto">2</nav>
-                        <nav class="display-none min_currency_crypto">0.0045</nav>
-                        <nav class="display-none purse_currency_crypto">bc1q08eeg9eqnkvptz8mxyyrdfv6qpc2xtr0wuh75e</nav>
-                        <nav class="display-none network_currency_crypto">Bitcoin</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_crypto">
-                        <div class="img-currency-box img-currency-box_crypto">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/stellarxlm_1607284178.png">
-                        </div>
-                        <span class="title_crypto"> Stellar</span>
-                        <nav class="display-none code_currency_crypto">XLM</nav>
-                        <nav class="display-none max_currency_crypto">10000</nav>
-                        <nav class="display-none min_currency_crypto">1000</nav>
-                        <nav class="display-none purse_currency_crypto">GDQEUHLEZXKTUUGSBGA5WLE7KKM2AGLLREZDODA2WIJRVFEOXIISNWKD</nav>
-                        <nav class="display-none network_currency_crypto">XLM</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_crypto">
-                        <div class="img-currency-box img-currency-box_crypto">
-                          <img src="assets/tether.png">
-                        </div>
-                        <span class="title_crypto">Teher (BEP 20)</span>
-                        <nav class="display-none code_currency_crypto">USDT</nav>
-                        <nav class="display-none max_currency_crypto">2000</nav>
-                        <nav class="display-none min_currency_crypto">200</nav>
-                        <nav class="display-none purse_currency_crypto">0xA1053E1e3ccCBd7dd6FeecfC00331d799aFb210c</nav>
-                        <nav class="display-none network_currency_crypto">BEP 20</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_crypto">
-                        <div class="img-currency-box img-currency-box_crypto">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/tether-usdt-logo_1607514459.png">
-                        </div>
-                        <span class="title_crypto">Teher (TRC 20)</span>
-                        <nav class="display-none code_currency_crypto">USDT</nav>
-                        <nav class="display-none max_currency_crypto">2000</nav>
-                        <nav class="display-none min_currency_crypto">200</nav>
-                        <nav class="display-none purse_currency_crypto">TDyFTGxoQj33BaheD9GtTRUuvHBTFrUA43</nav>
-                        <nav class="display-none network_currency_crypto">TRC 20</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_crypto">
-                        <div class="img-currency-box img-currency-box_crypto">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/kisspng-ripple-cryptocurrency-exchange-investor-blockchain-5afc090ea32540.2105706115264668306683-removebg-preview.png">
-                        </div>
-                        <span class="title_crypto">Ripple</span>
-                        <nav class="display-none code_currency_crypto">XRP</nav>
-                        <nav class="display-none max_currency_crypto">4000</nav>
-                        <nav class="display-none min_currency_crypto">400</nav>
-                        <nav class="display-none purse_currency_crypto">rs1NKq4KRAStPU9pMCNcfdjsfzBQx4DR61</nav>
-                        <nav class="display-none network_currency_crypto">Ripple</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_crypto">
-                        <div class="img-currency-box img-currency-box_crypto">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/ethereumeth_1607284009.png">
-                        </div>
-                        <span class="title_crypto">Ethereum</span>
-                        <nav class="display-none code_currency_crypto">ETH</nav>
-                        <nav class="display-none max_currency_crypto">0.61</nav>
-                        <nav class="display-none min_currency_crypto">0.061</nav>
-                        <nav class="display-none purse_currency_crypto">0xA1053E1e3ccCBd7dd6FeecfC00331d799aFb210c</nav>
-                        <nav class="display-none network_currency_crypto">ERC 20</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_crypto">
-                        <div class="img-currency-box img-currency-box_crypto">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/dogecoindoge_1607284896.png">
-                        </div>
-                        <span class="title_crypto">Dogecoin</span>
-                        <nav class="display-none code_currency_crypto">DOGE</nav>
-                        <nav class="display-none max_currency_crypto">10000</nav>
-                        <nav class="display-none min_currency_crypto">1000</nav>
-                        <nav class="display-none purse_currency_crypto">DPQ4vyDb2yaMann5nLwsBCvebuFdUzK28n</nav>
-                        <nav class="display-none network_currency_crypto">dogecoin</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_crypto">
-                        <div class="img-currency-box img-currency-box_crypto">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/shiba-inu-shib-logo-9542F950B0-seeklogo.com_.png">
-                        </div>
-                        <span class="title_crypto">SHIB</span>
-                        <nav class="display-none code_currency_crypto">SHIB</nav>
-                        <nav class="display-none max_currency_crypto">20000000</nav>
-                        <nav class="display-none min_currency_crypto">2000000</nav>
-                        <nav class="display-none purse_currency_crypto">0xA1053E1e3ccCBd7dd6FeecfC00331d799aFb210c</nav>
-                        <nav class="display-none network_currency_crypto">ERC 20</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_crypto">
-                        <div class="img-currency-box img-currency-box_crypto">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/cardano_1621771160.png">
-                        </div>
-                        <span class="title_crypto">Cardano</span>
-                        <nav class="display-none code_currency_crypto">ADA</nav>
-                        <nav class="display-none max_currency_crypto">100000</nav>
-                        <nav class="display-none min_currency_crypto">300</nav>
-                        <nav class="display-none purse_currency_crypto">0xA1053E1e3ccCBd7dd6FeecfC00331d799aFb210c</nav>
-                        <nav class="display-none network_currency_crypto">BEP 20 </nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_crypto">
-                        <div class="img-currency-box img-currency-box_crypto">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/eos-logo-vector.png">
-                        </div>
-                        <span class="title_crypto">EOS</span>
-                        <nav class="display-none code_currency_crypto">EOS</nav>
-                        <nav class="display-none max_currency_crypto">1000</nav>
-                        <nav class="display-none min_currency_crypto">100</nav>
-                        <nav class="display-none purse_currency_crypto">0xA1053E1e3ccCBd7dd6FeecfC00331d799aFb210c</nav>
-                        <nav class="display-none network_currency_crypto">BEP 20</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_crypto">
-                        <div class="img-currency-box img-currency-box_crypto">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/1958_1621849326.png">
-                        </div>
-                        <span class="title_crypto">Tron</span>
-                        <nav class="display-none code_currency_crypto">TRX</nav>
-                        <nav class="display-none max_currency_crypto">200000</nav>
-                        <nav class="display-none min_currency_crypto">20000</nav>
-                        <nav class="display-none purse_currency_crypto">TDyFTGxoQj33BaheD9GtTRUuvHBTFrUA43</nav>
-                        <nav class="display-none network_currency_crypto">TRC 20</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_crypto">
-                        <div class="img-currency-box img-currency-box_crypto">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/litecoinltc_1607284440.png">
-                        </div>
-                        <span class="title_crypto">Litecoin</span>
-                        <nav class="display-none code_currency_crypto">LTC</nav>
-                        <nav class="display-none max_currency_crypto">10</nav>
-                        <nav class="display-none min_currency_crypto">1</nav>
-                        <nav class="display-none purse_currency_crypto">ltc1qu9g9syz4pzhd2tdmsxatsye2neza4j7p0exglw</nav>
-                        <nav class="display-none network_currency_crypto">Litecoin</nav>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="normal-input">
-                    <svg class="input-icon" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
-                      <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"></path>
-                    </svg>
-                    <input type="email" name="Orders[contact]" placeholder="E-mail" class="email_user_input" required>
-                  </div>
-                </div>
-                <div class="right-steps__form">
-                  <div class="title_cash_currency">
-                    <nav class="title-steps__form">ПОЛУЧАЕТЕ</nav>
-                    <nav class="currency_demonstration"> Курс обмена 1 <nav class="currency_symbol_crypto"></nav> = <nav class="current_informer"></nav>
-                      <nav class="currency_symbol_cash"></nav>
-                    </nav>
-                  </div>
-                  <div class="box-currency-inputs">
-                    <div class="inputs-currency">
-                      <div class="left-currency-input left-currency-input_cash">
-                        <div class="img-currency-input img-currency-input_cash">
-                          <img src="">
-                        </div>
-                        <span class="title-currency-input_cash"></span>
-                        <i class="fa fa-sort-desc" aria-hidden="true"></i>
-                      </div>
-                      <div class="right-currency-input">
-                        <input type="number" name="currency_export" placeholder="" class="currency_inut_center input_import_cash" required>
-                        <nav class="currency_symbol currency_symbol_cash"></nav>
-                        <span class="max-numbers">
-                          <span class="max-numbers_cash"></span>
-                        </span>
-                        <span class="max-numbers max-numbers_cash_red display-none">Max: <span class="max-numbers_cash"></span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="box-currencys-for-inputs box-currencys-for-inputs_cash">
-                      <nav class="title-currencys-for-inputs">Платежные системы</nav>
-                      <div class="post-currency-for-input post-currency-for-input_cash">
-                        <div class="img-currency-box img-currency-box_cash">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/04/oschadbank_1621771304.png">
-                        </div>
-                        <span class="title_cash">Ощадбанк</span>
-                       <nav class="display-none code_currency_cash">RUB</nav>
-                        <nav class="display-none code_currency_placeholder">Номер карты</nav>
-                        <nav class="display-none max_currency_cash">351000</nav>
-                        <nav class="display-none min_currency_cash">50</nav>
-                        <nav class="display-none code_fact_currency_cash">RUB</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_cash">
-                        <div class="img-currency-box img-currency-box_cash">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/Privat24_Logo.png">
-                        </div>
-                        <span class="title_cash">Приват24</span>
-                        <nav class="display-none code_currency_cash">RUB</nav>
-                        <nav class="display-none code_currency_placeholder">Номер карты</nav>
-                        <nav class="display-none max_currency_cash">351000</nav>
-                        <nav class="display-none min_currency_cash">50</nav>
-                        <nav class="display-none code_fact_currency_cash">RUB</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_cash">
-                        <div class="img-currency-box img-currency-box_cash">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/monobank_1621771860.png">
-                        </div>
-                        <span class="title_cash">Монобанк</span>
-                        <nav class="display-none code_currency_cash">RUB</nav>
-                        <nav class="display-none code_currency_placeholder">Номер карты</nav>
-                        <nav class="display-none max_currency_cash">351000</nav>
-                        <nav class="display-none min_currency_cash">50</nav>
-                        <nav class="display-none code_fact_currency_cash">RUB</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_cash">
-                        <div class="img-currency-box img-currency-box_cash">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/icon_sber-01.png">
-                        </div>
-                        <span class="title_cash">Сбербанк</span>
-                        <nav class="display-none code_currency_cash">RUB</nav>
-                        <nav class="display-none code_currency_placeholder">Номер карты</nav>
-                        <nav class="display-none max_currency_cash">351000</nav>
-                        <nav class="display-none min_currency_cash">50</nav>
-                        <nav class="display-none code_fact_currency_cash">RUB</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_cash">
-                        <div class="img-currency-box img-currency-box_cash">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/visamastercard_1621770275.png">
-                        </div>
-                        <span class="title_cash">Visa/MC, RUB</span>
-                        <nav class="display-none code_currency_cash">RUB</nav>
-                        <nav class="display-none code_currency_placeholder">Номер карты</nav>
-                        <nav class="display-none max_currency_cash">351000</nav>
-                        <nav class="display-none min_currency_cash">50</nav>
-                        <nav class="display-none code_fact_currency_cash">RUB</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_cash">
-                        <div class="img-currency-box img-currency-box_cash">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/visamastercard_1621770275.png">
-                        </div>
-                        <span class="title_cash">Visa/MC, RUB</span>
-                        <nav class="display-none code_currency_cash">RUB</nav>
-                        <nav class="display-none code_currency_placeholder">Номер карты</nav>
-                        <nav class="display-none max_currency_cash">5315441</nav>
-                        <nav class="display-none min_currency_cash">50</nav>
-                        <nav class="display-none code_fact_currency_cash">RUB</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_cash">
-                        <div class="img-currency-box img-currency-box_cash">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/vtb24_1607286347-2.png">
-                        </div>
-                        <span class="title_cash">ВТБ24</span>
-                        <nav class="display-none code_currency_cash">RUB</nav>
-                        <nav class="display-none code_currency_placeholder">Номер карты</nav>
-                        <nav class="display-none max_currency_cash">5315441</nav>
-                        <nav class="display-none min_currency_cash">50</nav>
-                        <nav class="display-none code_fact_currency_cash">RUB</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_cash">
-                        <div class="img-currency-box img-currency-box_cash">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/alfa_16072859904.png">
-                        </div>
-                        <span class="title_cash">Альфа Банк, RUB</span>
-                        <nav class="display-none code_currency_cash">RUB</nav>
-                        <nav class="display-none code_currency_placeholder">Номер карты</nav>
-                        <nav class="display-none max_currency_cash">351000</nav>
-                        <nav class="display-none min_currency_cash">50</nav>
-                        <nav class="display-none code_fact_currency_cash">RUB</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_cash">
-                        <div class="img-currency-box img-currency-box_cash">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/alfa_16072859904.png">
-                        </div>
-                        <span class="title_cash">Альфа Банк, RUB</span>
-                        <nav class="display-none code_currency_cash">RUB</nav>
-                        <nav class="display-none code_currency_placeholder">Номер карты</nav>
-                        <nav class="display-none max_currency_cash">5315441</nav>
-                        <nav class="display-none min_currency_cash">50</nav>
-                        <nav class="display-none code_fact_currency_cash">RUB</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_cash">
-                        <div class="img-currency-box img-currency-box_cash">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/pumb_1621770840.svg">
-                        </div>
-                        <span class="title_cash">Пумб</span>
-                        <nav class="display-none code_currency_cash">RUB</nav>
-                        <nav class="display-none code_currency_placeholder">Номер карты</nav>
-                        <nav class="display-none max_currency_cash">351000</nav>
-                        <nav class="display-none min_currency_cash">50</nav>
-                        <nav class="display-none code_fact_currency_cash">RUB</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_cash">
-                        <div class="img-currency-box img-currency-box_cash">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/Unknown-26.png">
-                        </div>
-                        <span class="title_cash">IZI Банк</span>
-                        <nav class="display-none code_currency_cash">RUB</nav>
-                        <nav class="display-none code_currency_placeholder">Номер карты</nav>
-                        <nav class="display-none max_currency_cash">351000</nav>
-                        <nav class="display-none min_currency_cash">50</nav>
-                        <nav class="display-none code_fact_currency_cash">RUB</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_cash">
-                        <div class="img-currency-box img-currency-box_cash">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/unnamed-18.png">
-                        </div>
-                        <span class="title_cash">Home Credit Bank</span>
-                        <nav class="display-none code_currency_cash">RUB</nav>
-                        <nav class="display-none code_currency_placeholder">Номер карты</nav>
-                        <nav class="display-none max_currency_cash">5315441</nav>
-                        <nav class="display-none min_currency_cash">50</nav>
-                        <nav class="display-none code_fact_currency_cash">RUB</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_cash">
-                        <div class="img-currency-box img-currency-box_cash">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/raiffeisen_1621771454.svg">
-                        </div>
-                        <span class="title_cash">Райффайзен</span>
-                        <nav class="display-none code_currency_cash">RUB</nav>
-                        <nav class="display-none code_currency_placeholder">Номер карты</nav>
-                        <nav class="display-none max_currency_cash">351000</nav>
-                        <nav class="display-none min_currency_cash">50</nav>
-                        <nav class="display-none code_fact_currency_cash">RUB</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_cash">
-                        <div class="img-currency-box img-currency-box_cash">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/ukrsibbank_1621771560.svg">
-                        </div>
-                        <span class="title_cash">УкрСиббанк</span>
-                        <nav class="display-none code_currency_cash">RUB</nav>
-                        <nav class="display-none code_currency_placeholder">Номер карты</nav>
-                        <nav class="display-none max_currency_cash">351000</nav>
-                        <nav class="display-none min_currency_cash">50</nav>
-                        <nav class="display-none code_fact_currency_cash">RUB</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_cash">
-                        <div class="img-currency-box img-currency-box_cash">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/unnamed-19.png">
-                        </div>
-                        <span class="title_cash">Wise, RUB</span>
-                        <nav class="display-none code_currency_cash">RUB</nav>
-                        <nav class="display-none code_currency_placeholder">Номер карты</nav>
-                        <nav class="display-none max_currency_cash">351000</nav>
-                        <nav class="display-none min_currency_cash">50</nav>
-                        <nav class="display-none code_fact_currency_cash">RUB</nav>
-                      </div>
-                      <div class="post-currency-for-input post-currency-for-input_cash">
-                        <div class="img-currency-box img-currency-box_cash">
-                          <img src="https://swap-pro.trade/wp-content/uploads/2022/05/unnamed-19.png">
-                        </div>
-                        <span class="title_cash">Wise, EUR</span>
-                        <nav class="display-none code_currency_cash">EUR</nav>
-                        <nav class="display-none code_currency_placeholder">Email WISE</nav>
-                        <nav class="display-none max_currency_cash">3543000</nav>
-                        <nav class="display-none min_currency_cash">200</nav>
-                        <nav class="display-none code_fact_currency_cash">EUR</nav>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="normal-input normal-input-fio">
-                    <svg class="input-icon" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
-                      <path d="M12 5.9c1.16 0 2.1.94 2.1 2.1s-.94 2.1-2.1 2.1S9.9 9.16 9.9 8s.94-2.1 2.1-2.1m0 9c2.97 0 6.1 1.46 6.1 2.1v1.1H5.9V17c0-.64 3.13-2.1 6.1-2.1M12 4C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 9c-2.67 0-8 1.34-8 4v3h16v-3c0-2.66-5.33-4-8-4z"></path>
-                    </svg>
-                    <input type="text" name="Orders[fio]" placeholder="ФИО получателя" class="fio_user" required>
-                  </div>
-                  <div class="normal-input normal-input-account">
-                    <div class="img_input_wallet_user"></div>
-                    <input type="text" id="account" name="" class="input_name_wallet_user" placeholder="">
-                  </div>
-                  <div class="form-bottom">
-                    <div class="left-chek-for-button">
-                      <input type="checkbox" class="custom-checkbox" id="happy" name="happy" value="" required>
-                      <label for="happy">Я согласен на обработку персональных данных и принимаю правила обмена</label>
-                    </div>
-                    <button class="form-btn" id="step1-btn">Создать заявку</button>
-                    <span class="informer-required">Заполните все поля!</span>
-                  </div>
-                </div>
-              </div>
-              <div class="rest_steps box-step2 display-none">
-                <nav class="title-steps__form">ОПЛАТА ЗАЯВКИ № <span class="number_order number_order2"></span>
-                </nav>
-                <ul class="steps_exchange">
-                  <li class="step_exchange complite_step_exchange">Верификация</li>
-                  <li class="step_exchange active_step_exchange">Оплата</li>
-                  <li class="step_exchange">Проверка</li>
-                  <li class="step_exchange">Перевод</li>
-                  <li class="step_exchange">Готово</li>
-                </ul>
-                <div class="left-steps__form">
-                  <div class="step2-input">
-                    <div class="step2-input-text"> Сеть: <br>
-                      <nav class="wallet_network" id="wallet_network"></nav>
-                    </div>
-                    <button class="step2-input-btn btn-copy" type="button" data-id="account" id="copy_network">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM15 5L21 11V21C21 22.1 20.1 23 19 23H7.99C6.89 23 6 22.1 6 21L6.01 7C6.01 5.9 6.9 5 8 5H15ZM14 12H19.5L14 6.5V12Z" fill="black"></path>
-                      </svg>
-                    </button>
-                    <span class="coupon-alert coupon-alert-number">Number copied!</span>
-                  </div>
-                  <div class="step2-input">
-                    <div class="step2-input-text"> Номер кошелька <span class="currency_symbol_crypto"></span>: <br>
-                      <nav class="number_wallet_cripto" id="wallet_crypto_carrency"></nav>
-                    </div>
-                    <button class="step2-input-btn btn-copy" type="button" data-id="account" id="copy_wallet_crypto_carrency">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM15 5L21 11V21C21 22.1 20.1 23 19 23H7.99C6.89 23 6 22.1 6 21L6.01 7C6.01 5.9 6.9 5 8 5H15ZM14 12H19.5L14 6.5V12Z" fill="black"></path>
-                      </svg>
-                    </button>
-                    <span class="coupon-alert coupon-alert-number">Number copied!</span>
-                  </div>
-                  <div class="step2-input step2-input-memo">
-                    <div class="step2-input-text"> MEMO: <br>
-                      <span class="memo_number" id="memo_number"></span>
-                    </div>
-                    <button class="step2-input-btn btn-copy" type="button" data-id="account" id="copy_summ_memo_number">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM15 5L21 11V21C21 22.1 20.1 23 19 23H7.99C6.89 23 6 22.1 6 21L6.01 7C6.01 5.9 6.9 5 8 5H15ZM14 12H19.5L14 6.5V12Z" fill="black"></path>
-                      </svg>
-                    </button>
-                    <span class="coupon-alert coupon-alert-memo_number">Number copied!</span>
-                  </div>
-                  <div class="step2-input">
-                    <div class="step2-input-text"> Сумма: <br>
-                      <span class="summ_for_crypto_carrency" id="summ_crypto_carrency"></span>
-                    </div>
-                    <button class="step2-input-btn btn-copy" type="button" data-id="account" id="copy_summ_for_crypto_carrency">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM15 5L21 11V21C21 22.1 20.1 23 19 23H7.99C6.89 23 6 22.1 6 21L6.01 7C6.01 5.9 6.9 5 8 5H15ZM14 12H19.5L14 6.5V12Z" fill="black"></path>
-                      </svg>
-                    </button>
-                    <span class="coupon-alert coupon-alert-crypto">Number copied!</span>
-                  </div>
-                  <br>
-                  <br>
-                  <nav class="timer_countdown">
-                    <img src="assets/icon-timer.png"> Произведите оплату в течение: <span class="timer_pays"></span>
-                  </nav>
-                </div>
-                <div class="right-steps__form right-steps__form2">
-                  <button class="form-btn" id="step2-btn">Я оплатил</button>
-                </div>
-              </div>
-              <section class="display-none">
-                <div class="BTC_exchanges">
-                  <span class="USD">30331</span>
-                  <span class="RUB">2091450</span>
-                  <span class="EUR">32742.7</span>
-                </div>
-                <div class="XLM_exchanges">
-                  <span class="USD">0.10</span>
-                  <span class="RUB">13.2</span>
-                  <span class="EUR">0.1805</span>
-                </div>
-                <div class="USDT_exchanges">
-                  <span class="USD">1</span>
-                  <span class="RUB">60</span>
-                  <span class="EUR">0.98</span>
-                </div>
-                <div class="XRP_exchanges">
-                  <span class="USD">0,30</span>
-                  <span class="RUB">29,89</span>
-                  <span class="EUR">0.608</span>
-                </div>
-                <div class="ETH_exchanges">
-                  <span class="USD">1909</span>
-                  <span class="RUB">141109</span>
-                  <span class="EUR">2773.05</span>
-                </div>
-                <div class="DOGE_exchanges">
-                  <span class="USD">0.10</span>
-                  <span class="RUB">9.8</span>
-                  <span class="EUR">0.133</span>
-                </div>
-                <div class="SHIB_exchanges">
-                  <span class="USD">0.00002</span>
-                  <span class="RUB">0.0014</span>
-                  <span class="EUR">0.000019</span>
-                </div>
-                <div class="ADA_exchanges">
-                  <span class="RUB">15.37</span>
-                  <span class="USD">0,50</span>
-                  <span class="RUB">39,77</span>
-                  <span class="EUR">0.8265</span>
-                </div>
-                <div class="EOS_exchanges">
-                  <span class="USD">1.2</span>
-                  <span class="RUB">154.7</span>
-                  <span class="EUR">2.0995</span>
-                </div>
-                <div class="TRX_exchanges">
-                  <span class="USD">0.08</span>
-                  <span class="RUB">5.6</span>
-                  <span class="EUR">0.076</span>
-                </div>
-                <div class="LTC_exchanges">
-                  <span class="USD">69</span>
-                  <span class="RUB">4475</span>
-                  <span class="EUR">65,72</span>
-                </div>
-              </section>
-              <section class="box-form-gravity">
-                <script type="text/javascript"></script>
-                <div class='gf_browser_chrome gform_wrapper gravity-theme' id='gform_wrapper_1'>
-                  <div class='gform_heading'>
-                    <h2 class="gform_title">Заявка на обмен</h2>
-                    <span class='gform_description'></span>
-                  </div>
-                  <form method='post' enctype='multipart/form-data' id='gform_1' action='/'>
-                    <div class='gform_body gform-body'>
-                      <div id='gform_fields_1' class='gform_fields top_label form_sublabel_below description_below'>
-                        <div id="field_1_1" class="gfield field_sublabel_below field_description_below gfield_visibility_visible" data-js-reload="field_1_1">
-                          <label class='gfield_label' for='input_1_1'>Заголовок записи</label>
-                          <div class='ginput_container ginput_container_post_title'>
-                            <input name='input_1' id='input_1_1' type='text' value='' class='large' aria-invalid="false" />
-                          </div>
-                        </div>
-                        <div id="field_1_4" class="gfield gfield--width-full field_sublabel_below field_description_below gfield_visibility_visible" data-js-reload="field_1_4">
-                          <label class='gfield_label' for='input_1_4'>Рубрика для записей</label>
-                          <div class='ginput_container ginput_container_select'>
-                            <select name='input_4' id='input_1_4' class='large gfield_select' aria-invalid="false">
-                              <option value='11'>Заявки</option>
-                            </select>
-                          </div>
-                        </div>
-                        <div id="field_1_10" class="gfield field_sublabel_below field_description_below gfield_visibility_visible" data-js-reload="field_1_10">
-                          <label class='gfield_label' for='input_1_10'>id_заявки</label>
-                          <div class='ginput_container ginput_container_text'>
-                            <input name='input_10' id='input_1_10' type='text' value='' class='large' aria-invalid="false" />
-                          </div>
-                        </div>
-                        <div id="field_1_11" class="gfield field_sublabel_below field_description_below gfield_visibility_visible" data-js-reload="field_1_11">
-                          <label class='gfield_label' for='input_1_11'>валюта_которую_продает</label>
-                          <div class='ginput_container ginput_container_text'>
-                            <input name='input_11' id='input_1_11' type='text' value='' class='large' aria-invalid="false" />
-                          </div>
-                        </div>
-                        <div id="field_1_12" class="gfield field_sublabel_below field_description_below gfield_visibility_visible" data-js-reload="field_1_12">
-                          <label class='gfield_label' for='input_1_12'>количество_продаваемой_валюты</label>
-                          <div class='ginput_container ginput_container_text'>
-                            <input name='input_12' id='input_1_12' type='text' value='' class='large' aria-invalid="false" />
-                          </div>
-                        </div>
-                        <div id="field_1_18" class="gfield gfield--width-full field_sublabel_below field_description_below gfield_visibility_visible" data-js-reload="field_1_18">
-                          <label class='gfield_label' for='input_1_18'>текущий_курс</label>
-                          <div class='ginput_container ginput_container_text'>
-                            <input name='input_18' id='input_1_18' type='text' value='' class='large' aria-invalid="false" />
-                          </div>
-                        </div>
-                        <div id="field_1_13" class="gfield field_sublabel_below field_description_below gfield_visibility_visible" data-js-reload="field_1_13">
-                          <label class='gfield_label' for='input_1_13'>валюта_которую_покупает</label>
-                          <div class='ginput_container ginput_container_text'>
-                            <input name='input_13' id='input_1_13' type='text' value='' class='large' aria-invalid="false" />
-                          </div>
-                        </div>
-                        <div id="field_1_14" class="gfield field_sublabel_below field_description_below gfield_visibility_visible" data-js-reload="field_1_14">
-                          <label class='gfield_label' for='input_1_14'>количество_покупаемой_валюты</label>
-                          <div class='ginput_container ginput_container_text'>
-                            <input name='input_14' id='input_1_14' type='text' value='' class='large' aria-invalid="false" />
-                          </div>
-                        </div>
-                        <div id="field_1_15" class="gfield field_sublabel_below field_description_below gfield_visibility_visible" data-js-reload="field_1_15">
-                          <label class='gfield_label' for='input_1_15'>номер_счета_на_который_хочет_получить_перевод</label>
-                          <div class='ginput_container ginput_container_text'>
-                            <input name='input_15' id='input_1_15' type='text' value='' class='large' aria-invalid="false" />
-                          </div>
-                        </div>
-                        <div id="field_1_16" class="gfield field_sublabel_below field_description_below gfield_visibility_visible" data-js-reload="field_1_16">
-                          <label class='gfield_label' for='input_1_16'>email_пользователя</label>
-                          <div class='ginput_container ginput_container_text'>
-                            <input name='input_16' id='input_1_16' type='text' value='' class='large' aria-invalid="false" />
-                          </div>
-                        </div>
-                        <div id="field_1_17" class="gfield field_sublabel_below field_description_below gfield_visibility_visible" data-js-reload="field_1_17">
-                          <label class='gfield_label' for='input_1_17'>фио_получателя</label>
-                          <div class='ginput_container ginput_container_text'>
-                            <input name='input_17' id='input_1_17' type='text' value='' class='large' aria-invalid="false" />
-                          </div>
-                        </div>
-                        <div id="field_1_19" class="gfield field_sublabel_below field_description_below gfield_visibility_visible" data-js-reload="field_1_19">
-                          <label class='gfield_label' for='input_1_19'>Email</label>
-                          <div class='ginput_container ginput_container_email'>
-                            <input name='input_19' id='input_1_19' type='text' value='' class='large' aria-invalid="false" />
-                          </div>
-                        </div>
-                        <div id="field_1_20" class="gfield field_sublabel_below field_description_below gfield_visibility_visible" data-js-reload="field_1_20">
-                          <label class='gfield_label' for='input_1_20'>number_memo</label>
-                          <div class='ginput_container ginput_container_text'>
-                            <input name='input_20' id='input_1_20' type='text' value='' class='large' aria-invalid="false" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class='gform_footer top_label'>
-                      <input type='submit' id='gform_submit_button_1' class='gform_button button' value='Отправить' onclick='if(window["gf_submitting_1"]){return false;}  window["gf_submitting_1"]=true;  ' onkeypress='if( event.keyCode == 13 ){ if(window["gf_submitting_1"]){return false;} window["gf_submitting_1"]=true;  jQuery("#gform_1").trigger("submit",[true]); }' />
-                      <input type='hidden' class='gform_hidden' name='is_submit_1' value='1' />
-                      <input type='hidden' class='gform_hidden' name='gform_submit' value='1' />
-                      <input type='hidden' class='gform_hidden' name='gform_unique_id' value='' />
-                      <input type='hidden' class='gform_hidden' name='state_1' value='WyJbXSIsIjQzZWQ5MGJhODUwMTQzNzFmMWIzYmY2YjUwOWZmNDRmIl0=' />
-                      <input type='hidden' class='gform_hidden' name='gform_target_page_number_1' id='gform_target_page_number_1' value='0' />
-                      <input type='hidden' class='gform_hidden' name='gform_source_page_number_1' id='gform_source_page_number_1' value='1' />
-                      <input type='hidden' name='gform_field_values' value='' />
-                    </div>
-                  </form>
-                </div>
-              </section>
-            </div>
-          </div>
-        </div>
-        <script>
-          $('.post-currency-for-input_cash').click(function() {});
-        </script>
-        <div class="box-valute">
-          <div class="container-box posts-valute">
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('assets/bitcoin.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>Bitcoin</nav>
-                <span>2 BTC</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('assets/stellarxlm_1607284178.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav> Stellar</nav>
-                <span>10000 XLM</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('assets/tether.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>Tether (BEP 20)</nav>
-                <span>2000 USDT</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('assets/tether.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>Tether (TRC 20)</nav>
-                <span>2000 USDT</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('assets/kisspng-ripple-cryptocurrency-exchange-investor-blockchain-5afc090ea32540.2105706115264668306683-removebg-preview.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>Ripple</nav>
-                <span>4000 XRP</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('assets/ethereum.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>Ethereum</nav>
-                <span>0.61 ETH</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('assets/ethereum.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>Dogecoin</nav>
-                <span>10000 DOGE</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('assets/shiba-inu-shib-logo-9542F950B0-seeklogo.com_.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>SHIB</nav>
-                <span>20000000 SHIB</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('assets/cardano_1621771160.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>Cardano</nav>
-                <span>100000 ADA</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('assets/eos-logo-vector.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>EOS</nav>
-                <span>1000 EOS</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('assets/1958_1621849326.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>Tron</nav>
-                <span>200000 TRX</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('assets/litecoinltc_1607284440.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>Litecoin</nav>
-                <span>10 LTC</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('https://swap-pro.trade/wp-content/uploads/2022/04/oschadbank_1621771304.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>Ощадбанк</nav>
-                <span>1310000 RUB</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('https://swap-pro.trade/wp-content/uploads/2022/05/Privat24_Logo.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>Приват24</nav>
-                <span>351000 RUB</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('https://swap-pro.trade/wp-content/uploads/2022/05/monobank_1621771860.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>Монобанк</nav>
-                <span>351000 RUB</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('https://swap-pro.trade/wp-content/uploads/2022/05/icon_sber-01.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>Сбербанк</nav>
-                <span>351000 RUB</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('https://swap-pro.trade/wp-content/uploads/2022/05/visamastercard_1621770275.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>Visa/MC, RUB</nav>
-                <span>1256000 RUB</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('https://swap-pro.trade/wp-content/uploads/2022/05/visamastercard_1621770275.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>Visa/MC, RUB</nav>
-                <span>5315441 RUB</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('https://swap-pro.trade/wp-content/uploads/2022/05/vtb24_1607286347-2.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>ВТБ24</nav>
-                <span>5315441 RUB</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('https://swap-pro.trade/wp-content/uploads/2022/05/alfa_16072859904.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>Альфа Банк, RUB</nav>
-                <span>1256000 RUB</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('https://swap-pro.trade/wp-content/uploads/2022/05/alfa_16072859904.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>Альфа Банк, RUB</nav>
-                <span>5315441 RUB</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('https://swap-pro.trade/wp-content/uploads/2022/05/pumb_1621770840.svg');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>Пумб</nav>
-                <span>1256000 RUB</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('https://swap-pro.trade/wp-content/uploads/2022/05/Unknown-26.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>IZI Банк</nav>
-                <span>1256000 RUB</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('https://swap-pro.trade/wp-content/uploads/2022/05/unnamed-18.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>Home Credit Bank</nav>
-                <span>5315441 RUB</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('https://swap-pro.trade/wp-content/uploads/2022/05/raiffeisen_1621771454.svg');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>Райффайзен</nav>
-                <span>1256000 RUB</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('https://swap-pro.trade/wp-content/uploads/2022/05/ukrsibbank_1621771560.svg');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>УкрСиббанк</nav>
-                <span>1256000 RUB</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('https://swap-pro.trade/wp-content/uploads/2022/05/unnamed-19.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>Wise, RUB</nav>
-                <span>1256000 RUB</span>
-              </div>
-            </div>
-            <div class="post-valute">
-              <div class="img-post-valute" style="background:url('https://swap-pro.trade/wp-content/uploads/2022/05/unnamed-19.png');background-position: center; background-size: contain; background-repeat: no-repeat;"></div>
-              <div class="text-post-valute">
-                <nav>Wise, EUR</nav>
-                <span>3543000 EUR</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="box-advantages">
-          <div class="container-box posts-advantages">
-            <div class="post-advantages">
-              <img src="https://swap-pro.trade/wp-content/uploads/2022/04/1.png">
-              <nav>ВЫГОДНЫЙ ОБМЕН 24/7</nav>
-              <section>Качественно меняем валюту онлайн вот уже на протяжении 5 лет.</section>
-            </div>
-            <div class="post-advantages">
-              <img src="https://swap-pro.trade/wp-content/uploads/2022/04/2.png">
-              <nav>НАДЕЖНОСТЬ НА ПРЕДЕЛЕ</nav>
-              <section>Сомневаетесь? Если что-то пошло не так, мы всегда вернем Вам деньги. Помните об этом.</section>
-            </div>
-            <div class="post-advantages">
-              <img src="https://swap-pro.trade/wp-content/uploads/2022/04/3.png">
-              <nav>БЫСТРЫЙ ОБМЕН ДО 7 МИН.</nav>
-              <section>Нас любят не только за надежность и лучший курс, но и за быстрый обмен.</section>
-            </div>
-            <div class="post-advantages">
-              <img src="https://swap-pro.trade/wp-content/uploads/2022/04/4.png">
-              <nav>1670 НАПРАВЛЕНИЙ ОБМЕНА</nav>
-              <section>Совершаем обмены в самых популярных направлениях. Вы всегда сможете обменять свои средства.</section>
-            </div>
-            <div class="post-advantages">
-              <img src="https://swap-pro.trade/wp-content/uploads/2022/04/5.png">
-              <nav>100% ГАРАНТИЯ ОБМЕНА</nav>
-              <section>Многочисленные положительные отзывы подтверждают высокое качество нашей работы.</section>
-            </div>
-            <div class="post-advantages">
-              <img src="https://swap-pro.trade/wp-content/uploads/2022/04/6.png">
-              <nav>ЭКОНОМИЧНЫЙ ОБМЕН</nav>
-              <section>У нас всегда лояльные курсы. Мы всегда открыты к сотрудничеству, обращайтесь.</section>
-            </div>
-          </div>
-        </div> >
+    <header class="header">
+      <div class="header-wrapper">
+        <img
+          src="https://storage.googleapis.com/gaimin-images/gaimin-header-login-logo-2.png"
+          alt="logo"
+          class="header-image" />
       </div>
-      <!--закрылся id content for header-->
-      <div id="footer">
-        <footer>
-          <div class="container-box footer-box">
-            <div class="box-content-footer footer-left">
-              <img src="assets/logo.png">
-              <span>СЕРВИС КАЧЕСТВЕННЫХ И БЫСТРЫХ ОБМЕНОВ ВАЛЮТ 24/7 <br>© Все права защищены. Copyright © 2022 </span>
-            </div>
-            <div class="box-content-footer footer-right">
-              <ul id="menu-footer-menu" class="menu">
-                <li id="menu-item-228" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-228">
-                  <a href="#">Условия обмена</a>
-                </li>
-                <li id="menu-item-73" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-73">
-                  <a href="#">Контакты</a>
-                </li>
-              </ul>
-              <a href="#" target="_blank">
-                <img src="assets/telegram.png">
-              </a>
-            </div>
+    </header>
+    <main class="main">
+      <div class="main-wrapper">
+        <div class="main-content">
+          <div class="main-content__image">
+            <img
+              src="https://storage.googleapis.com/gaimin-images/ghost.svg"
+              alt="ghost"
+              class="main-content__image-img" />
           </div>
-        </footer>
+          <div class="main-content__text">
+            <h1 id="infoMessage" class="main-content__text-title">Close your browser after Phantom is connected.</h1>
+          </div>
+        </div>
       </div>
-    </div>
-    <!--закрылся id content-sites for header-->
-
-
-    <script>
-      $(document).ready(function() {
-        $('.slider-top-page').slick({
-          infinite: true,
-          speed: 500,
-          fade: true,
-          cssEase: 'linear',
-          autoplay: true,
-          autoplaySpeed: 2500,
-        });
-        $('.slider-ackii-index').slick({
-          autoplay: true,
-          autoplaySpeed: 2500,
-        });
-      });
-    </script>
+    </main>
   </body>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      position: relative;
+      height: 100%;
+    }
+
+    body {
+      background-color: #101011;
+    }
+
+    .header-wrapper {
+      max-width: 165px;
+      width: 100%;
+      margin: 0 auto;
+      padding-top: 70px;
+      text-align: center;
+    }
+
+    .header-image {
+      width: 100%;
+    }
+
+    .main {
+      height: 100%;
+    }
+
+    .main-wrapper {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .main-content {
+      padding: 110px;
+      text-align: center;
+      border: 1px solid #22222b;
+      border-radius: 10px;
+    }
+
+    .main-content__image {
+      padding-bottom: 20px;
+    }
+
+    .main-content__image-img {
+      width: 45px;
+      height: 45px;
+    }
+
+    .main-content__text-title {
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 400;
+      font-size: 20px;
+      line-height: 27px;
+      color: #ffffff;
+    }
+  </style>
 </html>
